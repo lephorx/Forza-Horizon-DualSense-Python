@@ -59,17 +59,21 @@ VSVersionInfo(
 datas = [
     (str(SRC / "data" / "icon.ico"), "data"),
     (str(SRC / "data" / "icon.png"), "data"),
+    (str(SRC / "data" / "default_bg.jpg"), "data"),
     (str(SRC / "pyproject.toml"), "."),
     (str(SRC / "lang"), "lang"),
+    (str(SRC / "modules" / "gui" / "web"), "modules/gui/web"),
 ]
 datas += collect_data_files("customtkinter")
 datas += collect_data_files("textual")
+datas += collect_data_files("webview")
 
 hiddenimports = []
 hiddenimports += collect_submodules("textual")
 hiddenimports += collect_submodules("customtkinter")
 hiddenimports += collect_submodules("pystray")
-hiddenimports += ["PIL.Image", "PIL.ImageDraw"]
+hiddenimports += collect_submodules("webview")
+hiddenimports += ["PIL.Image", "PIL.ImageDraw", "clr", "pythonnet"]
 
 a = Analysis(
     [str(SRC / "main.py")],
