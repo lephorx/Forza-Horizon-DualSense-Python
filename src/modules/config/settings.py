@@ -65,26 +65,27 @@ class Settings:
     # `wheelspin_amp` is the tarmac reference. Off-road / water amps scale off it
     # (water 0.5x, dirt 1.5x, gravel 2x). Surface freqs are fixed in code.
     enable_wheelspin_buzz: bool = True
+    wheelspin_slip_threshold: float = 3.0     # tire_combined_slip needed to trigger buzz (1.0 fires on normal accel, 3.0+ = actual wheelspin)
     wheelspin_amp: int = 3
 
     # MARK: R2 idle buzz
     # Engine-idle oscillation while stopped and accelerator pressed under ~25%.
     # Single chug pattern: vibrate amp toggles between low and high every half-period.
-    enable_idle_buzz: bool = True
+    enable_idle_buzz: bool = False
     idle_max_speed_kmh: float = 5.0           # only while car is essentially stopped
     idle_accel_max: int = 64                  # upper byte (~25% of 255): idle fades out past this press
     idle_freq: int = 30                       # base vibrate Hz
-    idle_amp_low: int = 1                     # quiet half of the cycle
-    idle_amp_high: int = 30                  # loud half of the cycle
-    idle_period_s: float = 0.5                # full cycle length (sec)
+    idle_amp_low: int = 10                    # quiet half of the cycle
+    idle_amp_high: int = 25                   # loud half of the cycle
+    idle_period_s: float = 0.4                # full cycle length (sec)
 
     # MARK: Gear shift
     # One short burst on up/downshift while moving.
     enable_gear_shift: bool = True            # buzz on R2
     enable_gear_shift_brake: bool = True      # also buzz on L2 via the wall
     gear_shift_freq: int = 10
-    gear_shift_amp: int = 255
-    gear_shift_duration_ms: float = 100.0     # burst length
+    gear_shift_amp: int = 160
+    gear_shift_duration_ms: float = 80.0      # burst length
 
     # MARK: System - startup pulse
     enable_startup_pulse: bool = True
