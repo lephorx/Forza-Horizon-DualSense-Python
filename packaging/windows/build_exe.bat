@@ -42,7 +42,7 @@ if exist "%DIST%" (
     )
 )
 
-uvx --from "pyinstaller>=6.11.1" --with customtkinter --with textual --with hidapi --with psutil --with dotenv --with pystray --with pillow pyinstaller "%~dp0fhds.spec" --distpath "%DIST%" --workpath "%WORK%" --noconfirm --clean
+uvx --from "pyinstaller>=6.11.1" --with customtkinter --with textual --with hidapi --with psutil --with python-dotenv --with pystray --with pillow --with pywebview --with pythonnet pyinstaller "%~dp0fhds.spec" --distpath "%DIST%" --workpath "%WORK%" --noconfirm --clean
 if errorlevel 1 (
     echo.
     echo Build FAILED.

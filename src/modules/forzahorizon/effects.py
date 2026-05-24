@@ -24,6 +24,10 @@ DRIVEN_WHEELS = {0: ("fl", "fr"), 1: ("rl", "rr"), 2: ("fl", "fr", "rl", "rr")}
 def _amp_to_strength(amp_byte):
     return max(1, min(8, (max(0, int(amp_byte)) // 32) + 1))
 
+def _sf(v, s) -> int:
+    """Scale a force/amp byte by s.trigger_intensity."""
+    return min(255, max(0, round(float(v) * getattr(s, "trigger_intensity", 1.0))))
+
 def _max_slip(t, prefix, wheels=("fl", "fr", "rl", "rr")):
     return max(abs(t[f"{prefix}_{w}"]) for w in wheels)
 
@@ -80,8 +84,8 @@ class TriggerAnimations:
             return None
         # Wall 0hz for kickback, else normal vibrate.
         if pedal >= (wall_engage_at + RAW_MAX) // 2:
-            return vibrate_zones(_amp_to_strength(s.gear_shift_amp), 0, s.wall_zones)
-        return vibrate(s.gear_shift_freq, s.gear_shift_amp)
+            return vibrate_zones(_amp_to_strength(_sf(s.gear_shift_amp, s)), 0, s.wall_zones)
+        return vibrate(s.gear_shift_freq, _sf(s.gear_shift_amp, s))
 
     def rev_buzz(self, t, s, now):
         # Brief hold so rpm bouncing against the limit doesn't stutter.
@@ -91,14 +95,14 @@ class TriggerAnimations:
             t["accel"] >= RAW_MAX * 0.8 and
             t["handbrake"] > 16 and t["speed"] < 1)
         if handbrake_full_throttle:
-            return vibrate(s.rev_limit_freq, s.rev_limit_amp)
+            return vibrate(s.rev_limit_freq, _sf(s.rev_limit_amp, s))
         if t["accel"] >= s.accel_deadzone:
             max_rpm = t["max_rpm"]
             rpm_r = t["rpm"] / max_rpm if max_rpm > 0 else 0.0
             if rpm_r > s.rev_limit_ratio:
                 self._rev_until = now + s.rev_limit_hold_ms / 1000.0
         if now < self._rev_until:
-            return vibrate(s.rev_limit_freq, s.rev_limit_amp)
+            return vibrate(s.rev_limit_freq, _sf(s.rev_limit_amp, s))
         return None
 
     def idle_buzz(self, t, s, now):
@@ -111,7 +115,7 @@ class TriggerAnimations:
             return None
         loud = (now / s.idle_period_s) % 1.0 < 0.5
         amp = s.idle_amp_high if loud else s.idle_amp_low
-        return vibrate(s.idle_freq, amp)
+        return vibrate(s.idle_freq, _sf(amp, s))
 
     def wheelspin_buzz(self, t, s, now):
         # R2 buzz when tires lose grip (wheelspin or drift).
@@ -131,13 +135,13 @@ class TriggerAnimations:
         # Surface profile: tarmac amp is the reference, others scale off it.
         amp = s.wheelspin_amp
         if any(t[f"wheel_in_puddle_{w}"] > 0 for w in wheels):
-            return vibrate(130, 1)            # water: tarmac freq, slippery -> half amp
+            return vibrate(130, _sf(1, s))    # water: tarmac freq, slippery -> half amp
         rumble = max(abs(t[f"surface_rumble_{w}"]) for w in wheels)
         if rumble > 0.30:                                    # gravel / rocks: chunky thump
-            return vibrate(15, min(255, amp * 3))
+            return vibrate(15, _sf(min(255, amp * 3), s))
         if rumble > 0.10:                                    # dirt / loose: low rumble
-            return vibrate(45, min(255, int(amp * 2)))
-        return vibrate(130, amp)                             # tarmac: sharp squeal
+            return vibrate(45, _sf(min(255, int(amp * 2)), s))
+        return vibrate(130, _sf(amp, s))                     # tarmac: sharp squeal
 
     def abs_pulse(self, t, s):
         if not s.enable_abs:
@@ -147,7 +151,7 @@ class TriggerAnimations:
         if (_max_slip(t, "tire_slip_ratio") < s.abs_slip_ratio_threshold
                 and _max_slip(t, "tire_combined_slip") < s.abs_combined_slip_threshold):
             return None
-        return vibrate(s.abs_freq, s.abs_amp)
+        return vibrate(s.abs_freq, _sf(s.abs_amp, s))
 
     def brake_resistance(self, t, s):
         handbrake = s.enable_handbrake_bonus and t["handbrake"]
@@ -157,13 +161,13 @@ class TriggerAnimations:
                       s.brake_max_force, s.brake_curve, s.brake_wall_engage_at)
         if handbrake:
             force += s.handbrake_bonus
-        return rigid(force)
+        return rigid(_sf(force, s))
 
     def throttle_ramp(self, t, s):
         if not s.enable_throttle_resistance:
             return off()
-        return rigid(_ramp(t["accel"], s.accel_deadzone, s.throttle_baseline_force,
-                           s.throttle_max_force, s.throttle_curve, s.throttle_wall_engage_at))
+        return rigid(_sf(_ramp(t["accel"], s.accel_deadzone, s.throttle_baseline_force,
+                              s.throttle_max_force, s.throttle_curve, s.throttle_wall_engage_at), s))
 
 
 # --- Controller -----------------------------------------------------------
