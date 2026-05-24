@@ -117,6 +117,10 @@ class Settings:
     # writes trigger effects. Prevents HID conflicts with Moonlight/SDL2 on macOS.
     moonlight_mode: bool = False
 
+    # MARK: Trigger intensity
+    # Global multiplier applied to all force and amplitude values (0.0 = off, 1.0 = default, 2.0 = max).
+    trigger_intensity: float = 1.0
+
     # MARK: System - auto exit
     # Closes when the game process disappears; telemetry-lost is a fallback for Task Manager kills.
     exit_on_game_close: bool = True

@@ -96,8 +96,8 @@ jobs:
         run: |
           uvx --from "pyinstaller>=6.11.1" `
               --with customtkinter --with textual `
-              --with hidapi --with psutil --with dotenv `
-              --with pystray --with pillow `
+              --with hidapi --with psutil --with python-dotenv `
+              --with pystray --with pillow --with pywebview --with pythonnet `
               pyinstaller "$Env:GITHUB_WORKSPACE\packaging\windows\fhds.spec" `
               --distpath "$Env:GITHUB_WORKSPACE\packaging\windows\dist" `
               --workpath "$Env:GITHUB_WORKSPACE\packaging\windows\build" `

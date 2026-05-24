@@ -43,6 +43,7 @@ GLOBAL_FIELDS = frozenset({
     "controller_lock_serial",
     "background_image_path",
     "moonlight_mode",
+    "trigger_intensity",
 })
 
 _SIMPLE = (bool, int, float, str)
