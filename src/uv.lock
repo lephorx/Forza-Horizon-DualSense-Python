@@ -78,7 +78,7 @@ wheels = [
 
 [[package]]
 name = "fhds"
-version = "1.4.9"
+version = "1.0.2"
 source = { virtual = "." }
 dependencies = [
     { name = "customtkinter" },
