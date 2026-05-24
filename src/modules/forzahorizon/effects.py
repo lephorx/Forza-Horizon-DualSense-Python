@@ -130,7 +130,7 @@ class TriggerAnimations:
             if max(abs(t[f"wheel_rotation_speed_{w}"]) for w in wheels) < BURNOUT_ROT_THRESHOLD:
                 return None
         else:
-            if max(abs(t[f"tire_combined_slip_{w}"]) for w in wheels) < 1.0:
+            if max(abs(t[f"tire_combined_slip_{w}"]) for w in wheels) < s.wheelspin_slip_threshold:
                 return None
         # Surface profile: tarmac amp is the reference, others scale off it.
         amp = s.wheelspin_amp

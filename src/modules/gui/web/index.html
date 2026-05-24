@@ -271,6 +271,22 @@ input[type=number]:focus { outline: none; border-color: var(--accent); }
           <div class="ttrack"></div><div class="tthumb"></div>
         </label>
       </div>
+
+      <div class="row">
+        <span class="rlabel">Wheelspin Buzz</span>
+        <label class="tgl">
+          <input type="checkbox" id="tg-wheelspin" onchange="saveBool('enable_wheelspin_buzz',this.checked)">
+          <div class="ttrack"></div><div class="tthumb"></div>
+        </label>
+      </div>
+
+      <div class="row">
+        <span class="rlabel">Idle Buzz</span>
+        <label class="tgl">
+          <input type="checkbox" id="tg-idle" onchange="saveBool('enable_idle_buzz',this.checked)">
+          <div class="ttrack"></div><div class="tthumb"></div>
+        </label>
+      </div>
     </div>
 
     <!-- Brake Tuning -->
@@ -394,6 +410,8 @@ function applySettings(s) {
   document.getElementById('tg-brake').checked    = !!s.enable_brake_resistance;
   document.getElementById('tg-throttle').checked = !!s.enable_throttle_resistance;
   document.getElementById('tg-abs').checked      = !!s.enable_abs;
+  document.getElementById('tg-wheelspin').checked = !!s.enable_wheelspin_buzz;
+  document.getElementById('tg-idle').checked     = !!s.enable_idle_buzz;
   document.getElementById('tg-pulse').checked    = !!s.enable_startup_pulse;
 
   // sliders
