@@ -360,10 +360,10 @@ class WebViewGUI:
             "FH DualSense",
             html=html,
             js_api=api,
-            width=1100,
-            height=720,
-            min_size=(820, 540),
-            background_color="#07080e",
+            width=1200,
+            height=780,
+            min_size=(900, 560),
+            background_color="#0a0b10",
             frameless=False,
         )
         self._window.events.closed += self._on_closed

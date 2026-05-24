@@ -8,375 +8,379 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --glass:    rgba(7, 8, 20, 0.68);
-  --card:     rgba(10, 11, 26, 0.72);
-  --blur:     blur(24px) saturate(160%);
-  --border:   rgba(58, 62, 100, 0.65);
-  --border-hi:rgba(99, 102, 241, 0.50);
+  --panel:    rgba(12, 13, 20, 0.62);
+  --header:   rgba(6, 7, 12, 0.80);
+  --row:      rgba(255,255,255,0.02);
+  --border:   rgba(255,255,255,0.09);
+  --blur:     blur(28px) saturate(160%);
   --accent:   #6366f1;
-  --accent-h: #818cf8;
   --green:    #22c55e;
-  --green-h:  #16a34a;
   --red:      #ef4444;
-  --red-h:    #dc2626;
-  --text:     #eceef8;
-  --muted:    #7e82a2;
-  --faint:    #3e4260;
-  --radius:   14px;
-  font-family: -apple-system, "SF Pro Display", BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --text:     #dde0f0;
+  --muted:    #6b7090;
+  --faint:    #353750;
+  font-family: -apple-system, "Segoe UI", BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
   color: var(--text);
   -webkit-font-smoothing: antialiased;
 }
 
-html, body { height: 100%; overflow: hidden; }
+html, body {
+  width: 100%; height: 100%; overflow: hidden;
+  background: #0a0b10;
+}
 
 body {
   background-image: url('__BG_URI__');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ── Header ───────────────────────────────────────────────────────────────── */
-header {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  height: 54px;
-  background: var(--glass);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center;
-  padding: 0 18px; gap: 12px;
+/* ── Layout ───────────────────────────────────────────────────────────────── */
+.workspace {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 24px 16px;
+  gap: 14px;
+  overflow: hidden;
 }
-.h-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 10px var(--accent);
+
+.footer {
+  padding: 7px 16px;
+  background: rgba(6,7,12,0.75);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
   flex-shrink: 0;
 }
-.h-title  { font-size: 15px; font-weight: 700; letter-spacing: .15px; }
-.h-sub    { font-size: 11px; color: var(--muted); }
-.h-space  { flex: 1; }
-
-.status-pill {
-  display: flex; align-items: center; gap: 7px;
-  background: rgba(12,14,30,.75); border: 1px solid var(--border);
-  border-radius: 99px; padding: 5px 14px;
-  font-size: 11px; font-weight: 700; letter-spacing: .5px; white-space: nowrap;
+.footer-link {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 11px;
+  transition: color .15s;
 }
-.sdot { width: 7px; height: 7px; border-radius: 50%; }
-.prefix { color: var(--muted); margin-right: 2px; }
+.footer-link:hover { color: var(--text); }
+.footer-sp { color: #f472b6; }
+.footer-sp:hover { color: #fb7185; }
 
-.hbtn {
-  height: 32px; padding: 0 16px; border-radius: 8px; border: none;
-  font-size: 12px; font-weight: 700; cursor: pointer; transition: background .15s;
-  white-space: nowrap;
-}
-.hbtn-start { background: var(--green); color: #fff; }
-.hbtn-start:hover:not(:disabled) { background: var(--green-h); }
-.hbtn-start:disabled { opacity: .4; cursor: default; }
-.hbtn-stop  { background: rgba(239,68,68,.15); color: var(--red); border: 1px solid rgba(239,68,68,.3); }
-.hbtn-stop:hover:not(:disabled)  { background: var(--red); color: #fff; }
-.hbtn-stop:disabled  { opacity: .3; cursor: default; }
-
-/* ── Scroll ───────────────────────────────────────────────────────────────── */
-.scroll {
-  position: fixed; top: 54px; bottom: 0; left: 0; right: 0;
-  overflow-y: auto; padding: 18px 18px 24px;
-}
-.scroll::-webkit-scrollbar { width: 5px; }
-.scroll::-webkit-scrollbar-track { background: transparent; }
-.scroll::-webkit-scrollbar-thumb { background: rgba(99,102,241,.25); border-radius: 9px; }
-
-/* ── Grid ─────────────────────────────────────────────────────────────────── */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 13px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-.full { grid-column: 1 / -1; }
-
-/* ── Card ─────────────────────────────────────────────────────────────────── */
-.card {
-  background: var(--card);
+/* ── Panel ────────────────────────────────────────────────────────────────── */
+.panel {
+  background: var(--panel);
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 18px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
-.ctitle {
+
+.panel-left  { width: 260px; flex-shrink: 0; max-height: calc(100vh - 100px); }
+.panel-right { width: 480px; flex-shrink: 0; max-height: calc(100vh - 100px); }
+
+.panel-header {
+  background: var(--header);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+}
+.panel-body::-webkit-scrollbar { width: 4px; }
+.panel-body::-webkit-scrollbar-track { background: transparent; }
+.panel-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
+
+/* ── Controls panel ───────────────────────────────────────────────────────── */
+.session-btn {
+  width: 100%; padding: 11px; border-radius: 4px; border: none;
+  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; cursor: pointer; transition: background .15s;
+  margin-bottom: 4px;
+}
+.btn-start { background: rgba(34,197,94,.15); color: var(--green); border: 1px solid rgba(34,197,94,.3); }
+.btn-start:hover:not(:disabled) { background: var(--green); color: #fff; }
+.btn-start:disabled { opacity: .35; cursor: default; }
+.btn-stop  { background: rgba(239,68,68,.15); color: var(--red); border: 1px solid rgba(239,68,68,.3); }
+.btn-stop:hover:not(:disabled)  { background: var(--red); color: #fff; }
+.btn-stop:disabled  { opacity: .35; cursor: default; }
+
+.section-title {
   font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
-  color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
+  text-transform: uppercase; color: var(--muted);
+  margin: 16px 0 8px;
 }
 
-/* ── Status ───────────────────────────────────────────────────────────────── */
-.stat-row { display: flex; gap: 10px; }
-.stat-box { flex: 1; }
-.slabel { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
-.sval   { font-size: 22px; font-weight: 800; color: var(--faint); }
-.sval.ok  { color: var(--green); }
-.sval.run { color: var(--accent); }
+.status-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+}
+.status-row:last-child { border-bottom: none; }
+.status-label { color: var(--muted); font-size: 12px; }
+.status-val   { font-size: 12px; font-weight: 600; color: var(--faint); }
+.status-val.ok  { color: var(--green); }
+.status-val.run { color: var(--accent); }
 
-/* ── Field row ────────────────────────────────────────────────────────────── */
-.row {
+/* ── Settings panel ───────────────────────────────────────────────────────── */
+.setting-row {
   display: flex; align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(58,62,100,.25);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
 }
-.row:last-child { border-bottom: none; padding-bottom: 0; }
-.row:first-of-type { padding-top: 0; }
-.rlabel { flex: 1; font-size: 13px; color: var(--text); }
-.rval { font-size: 12px; color: var(--muted); min-width: 36px; text-align: right; }
+.setting-row:last-child { border-bottom: none; }
+.setting-label { flex: 1; font-size: 12px; color: var(--text); }
 
-/* ── Slider ───────────────────────────────────────────────────────────────── */
-.srow { display: flex; align-items: center; gap: 8px; }
+/* Slider */
+.slider-wrap { display: flex; align-items: center; gap: 8px; }
 input[type=range] {
-  accent-color: var(--accent); cursor: pointer;
-  width: 110px; height: 4px;
+  width: 130px; accent-color: var(--accent); cursor: pointer; height: 3px;
+}
+.slider-val {
+  width: 34px; text-align: right; font-size: 12px;
+  color: var(--muted); font-variant-numeric: tabular-nums;
 }
 
-/* ── Toggle ───────────────────────────────────────────────────────────────── */
-.tgl { position: relative; display: inline-flex; align-items: center; width: 38px; height: 20px; cursor: pointer; }
-.tgl input { opacity: 0; width: 0; height: 0; position: absolute; }
-.ttrack {
-  position: absolute; inset: 0; border-radius: 20px;
-  background: rgba(255,255,255,.08); border: 1px solid var(--border);
-  transition: background .2s, border-color .2s;
-}
-.tgl input:checked + .ttrack { background: var(--accent); border-color: var(--accent); }
-.tthumb {
-  position: absolute; width: 14px; height: 14px; border-radius: 50%;
-  background: #fff; top: 3px; left: 3px;
-  transition: left .2s; pointer-events: none;
-}
-.tgl input:checked ~ .tthumb { left: 21px; }
-
-/* ── Number input ─────────────────────────────────────────────────────────── */
+/* Number */
 input[type=number] {
-  background: rgba(14,16,32,.6); border: 1px solid var(--border);
-  color: var(--text); border-radius: 7px;
-  padding: 5px 8px; font-size: 13px;
-  width: 80px; text-align: right; -moz-appearance: textfield;
+  width: 72px; background: rgba(255,255,255,.06);
+  border: 1px solid var(--border); border-radius: 4px;
+  color: var(--text); padding: 4px 8px; font-size: 12px;
+  text-align: right; -moz-appearance: textfield;
 }
 input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
 input[type=number]:focus { outline: none; border-color: var(--accent); }
 
-/* ── Moon button ──────────────────────────────────────────────────────────── */
-.moonbtn {
-  width: 100%; padding: 10px; border-radius: 9px; border: none;
-  font-size: 13px; font-weight: 700; cursor: pointer; transition: all .15s;
+/* Toggle */
+.tgl { position: relative; display: inline-flex; align-items: center; width: 36px; height: 19px; cursor: pointer; }
+.tgl input { opacity: 0; width: 0; height: 0; position: absolute; }
+.ttrack {
+  position: absolute; inset: 0; border-radius: 19px;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+  transition: background .18s;
 }
-.moonbtn.off { background: rgba(14,16,32,.5); color: var(--muted); border: 1px solid var(--border); }
-.moonbtn.on  { background: rgba(99,102,241,.18); color: var(--accent); border: 1px solid rgba(99,102,241,.4); }
-.moonbtn:hover { filter: brightness(1.18); }
+.tgl input:checked + .ttrack { background: var(--accent); border-color: var(--accent); }
+.tthumb {
+  position: absolute; width: 13px; height: 13px; border-radius: 50%;
+  background: #fff; top: 3px; left: 3px; transition: left .18s; pointer-events: none;
+}
+.tgl input:checked ~ .tthumb { left: 20px; }
 
-/* ── Lang buttons ─────────────────────────────────────────────────────────── */
-.langrow { display: flex; gap: 8px; }
+/* Lang */
+.lang-wrap { display: flex; gap: 6px; }
 .lbtn {
-  flex: 1; padding: 9px 0; border-radius: 8px; border: none;
-  font-size: 12px; font-weight: 700; cursor: pointer; transition: all .15s;
-  background: rgba(14,16,32,.5); color: var(--muted); border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border);
+  background: rgba(255,255,255,.05); color: var(--muted);
+  font-size: 11px; font-weight: 700; cursor: pointer; transition: all .15s;
 }
 .lbtn.on { background: rgba(99,102,241,.2); color: var(--accent); border-color: rgba(99,102,241,.5); }
 
-/* ── Footer ───────────────────────────────────────────────────────────────── */
-.footer {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 2px; margin-top: 2px; opacity: .5;
+/* Moonlight */
+.moon-btn {
+  width: 100%; padding: 8px; border-radius: 4px; border: none;
+  font-size: 11px; font-weight: 700; letter-spacing: .5px;
+  text-transform: uppercase; cursor: pointer; transition: all .15s;
 }
-.credit { font-size: 10px; color: var(--muted); }
-.credit span { color: var(--accent); cursor: pointer; }
-.flinks { display: flex; gap: 14px; }
-.flink {
-  font-size: 10px; background: none; border: none; cursor: pointer;
-  color: var(--muted); transition: color .15s;
+.moon-btn.off { background: rgba(255,255,255,.05); color: var(--muted); border: 1px solid var(--border); }
+.moon-btn.on  { background: rgba(99,102,241,.18); color: var(--accent); border: 1px solid rgba(99,102,241,.4); }
+.moon-btn:hover { filter: brightness(1.2); }
+
+/* Reset btn */
+.reset-btn {
+  width: 100%; padding: 9px; border-radius: 4px; border: 1px solid var(--border);
+  background: rgba(255,255,255,.05); color: var(--muted);
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; cursor: pointer; transition: all .15s;
+  margin-top: 14px;
 }
-.flink:hover { color: var(--text); }
-.flink.sp { color: #f472b6; }
-.flink.sp:hover { color: #fb7185; }
+.reset-btn:hover { background: rgba(239,68,68,.15); color: var(--red); border-color: rgba(239,68,68,.3); }
+
+/* Status pill (top right of left panel body) */
+.conn-dot {
+  display: inline-block; width: 7px; height: 7px;
+  border-radius: 50%; margin-right: 6px; background: var(--faint);
+}
 </style>
 </head>
 <body>
 
-<!-- ── Header ──────────────────────────────────────────────────────────────── -->
-<header>
-  <div class="h-dot"></div>
-  <span class="h-title">FH DualSense</span>
-  <span class="h-sub">adaptive triggers</span>
-  <div class="h-space"></div>
-  <div class="status-pill">
-    <div class="sdot" id="sdot" style="background:var(--red)"></div>
-    <span class="prefix">DUALSENSE</span>
-    <span id="slabel">stopped</span>
-  </div>
-  <button class="hbtn hbtn-start" id="btn-start" onclick="onStart()">▶  Start</button>
-  <button class="hbtn hbtn-stop"  id="btn-stop"  onclick="onStop()" disabled>■  Stop</button>
-</header>
+<div class="workspace">
 
-<!-- ── Content ─────────────────────────────────────────────────────────────── -->
-<div class="scroll">
-  <div class="grid">
+  <!-- ── LEFT: Controls ──────────────────────────────────────────────────── -->
+  <div class="panel panel-left">
+    <div class="panel-header">Controls</div>
+    <div class="panel-body">
 
-    <!-- Status -->
-    <div class="card full">
-      <div class="ctitle">Status</div>
-      <div class="stat-row">
-        <div class="stat-box">
-          <div class="slabel">Controller</div>
-          <div class="sval" id="v-ctrl">–</div>
-        </div>
-        <div class="stat-box">
-          <div class="slabel">Session</div>
-          <div class="sval" id="v-sess">Stopped</div>
-        </div>
+      <button class="session-btn btn-start" id="btn-start" onclick="onStart()">▶  Start</button>
+      <button class="session-btn btn-stop"  id="btn-stop"  onclick="onStop()" disabled>■  Stop</button>
+
+      <div class="section-title">Status</div>
+      <div class="status-row">
+        <span class="status-label"><span class="conn-dot" id="ds-dot"></span>DualSense</span>
+        <span class="status-val" id="ds-val">–</span>
       </div>
+      <div class="status-row">
+        <span class="status-label">Session</span>
+        <span class="status-val" id="sess-val">Stopped</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">UDP</span>
+        <span class="status-val" id="udp-val">–</span>
+      </div>
+
     </div>
+  </div>
 
-    <!-- Triggers -->
-    <div class="card">
-      <div class="ctitle">Triggers</div>
+  <!-- ── RIGHT: Settings ─────────────────────────────────────────────────── -->
+  <div class="panel panel-right">
+    <div class="panel-header">Settings</div>
+    <div class="panel-body">
 
-      <div class="row">
-        <span class="rlabel">Overall Intensity</span>
-        <div class="srow">
-          <input type="range" id="sl-intensity" min="0" max="200" step="5" value="100"
-                 oninput="onSlider('trigger_intensity', this.value/100, 'v-intensity', '%', v => Math.round(v*100)+'%')">
-          <span class="rval" id="v-intensity">100%</span>
+      <!-- Language -->
+      <div class="setting-row">
+        <span class="setting-label">Language</span>
+        <div class="lang-wrap">
+          <button class="lbtn on" id="lbtn-en" onclick="setLang('en')">EN</button>
+          <button class="lbtn"    id="lbtn-de" onclick="setLang('de')">DE</button>
         </div>
       </div>
 
-      <div class="row">
-        <span class="rlabel">Brake Resistance</span>
+      <!-- UDP Port -->
+      <div class="setting-row">
+        <span class="setting-label">UDP Port</span>
+        <input type="number" id="inp-port" min="1" max="65535" value="5300"
+               onchange="api('save_setting','udp_port',+this.value)">
+      </div>
+
+      <!-- Sliders -->
+      <div class="setting-row">
+        <span class="setting-label">Brake Deadzone</span>
+        <div class="slider-wrap">
+          <input type="range" id="sl-bdz" min="0" max="255" step="1" value="50"
+                 oninput="onSlider('brake_deadzone',+this.value,'v-bdz',v=>v)">
+          <span class="slider-val" id="v-bdz">50</span>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <span class="setting-label">Brake Baseline Force</span>
+        <div class="slider-wrap">
+          <input type="range" id="sl-bbase" min="0" max="255" step="1" value="20"
+                 oninput="onSlider('brake_baseline_force',+this.value,'v-bbase',v=>v)">
+          <span class="slider-val" id="v-bbase">20</span>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <span class="setting-label">Brake Max Force</span>
+        <div class="slider-wrap">
+          <input type="range" id="sl-bmax" min="0" max="255" step="1" value="80"
+                 oninput="onSlider('brake_max_force',+this.value,'v-bmax',v=>v)">
+          <span class="slider-val" id="v-bmax">80</span>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <span class="setting-label">Overall Intensity</span>
+        <div class="slider-wrap">
+          <input type="range" id="sl-intensity" min="0" max="200" step="5" value="100"
+                 oninput="onIntensity(this.value)">
+          <span class="slider-val" id="v-intensity">100%</span>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <span class="setting-label">Startup Pulse Strength</span>
+        <div class="slider-wrap">
+          <input type="range" id="sl-pulse" min="0" max="255" step="1" value="150"
+                 oninput="onSlider('startup_pulse_force',+this.value,'v-pulse',v=>v)">
+          <span class="slider-val" id="v-pulse">150</span>
+        </div>
+      </div>
+
+      <!-- Toggles -->
+      <div class="setting-row">
+        <span class="setting-label">Enable Brake Resistance</span>
         <label class="tgl">
           <input type="checkbox" id="tg-brake" onchange="saveBool('enable_brake_resistance',this.checked)">
           <div class="ttrack"></div><div class="tthumb"></div>
         </label>
       </div>
 
-      <div class="row">
-        <span class="rlabel">Throttle Resistance</span>
+      <div class="setting-row">
+        <span class="setting-label">Enable Throttle Resistance</span>
         <label class="tgl">
           <input type="checkbox" id="tg-throttle" onchange="saveBool('enable_throttle_resistance',this.checked)">
           <div class="ttrack"></div><div class="tthumb"></div>
         </label>
       </div>
 
-      <div class="row">
-        <span class="rlabel">ABS Rumble</span>
+      <div class="setting-row">
+        <span class="setting-label">Enable ABS</span>
         <label class="tgl">
           <input type="checkbox" id="tg-abs" onchange="saveBool('enable_abs',this.checked)">
           <div class="ttrack"></div><div class="tthumb"></div>
         </label>
       </div>
 
-      <div class="row">
-        <span class="rlabel">Wheelspin Buzz</span>
-        <label class="tgl">
-          <input type="checkbox" id="tg-wheelspin" onchange="saveBool('enable_wheelspin_buzz',this.checked)">
-          <div class="ttrack"></div><div class="tthumb"></div>
-        </label>
-      </div>
-
-      <div class="row">
-        <span class="rlabel">Idle Buzz</span>
-        <label class="tgl">
-          <input type="checkbox" id="tg-idle" onchange="saveBool('enable_idle_buzz',this.checked)">
-          <div class="ttrack"></div><div class="tthumb"></div>
-        </label>
-      </div>
-    </div>
-
-    <!-- Brake Tuning -->
-    <div class="card">
-      <div class="ctitle">Brake Tuning</div>
-
-      <div class="row">
-        <span class="rlabel">Brake Deadzone</span>
-        <div class="srow">
-          <input type="range" id="sl-bdz" min="0" max="255" step="1" value="50"
-                 oninput="onSlider('brake_deadzone', +this.value, 'v-bdz', '', v=>v)">
-          <span class="rval" id="v-bdz">50</span>
-        </div>
-      </div>
-
-      <div class="row">
-        <span class="rlabel">Brake Baseline Force</span>
-        <div class="srow">
-          <input type="range" id="sl-bbase" min="0" max="255" step="1" value="20"
-                 oninput="onSlider('brake_baseline_force', +this.value, 'v-bbase', '', v=>v)">
-          <span class="rval" id="v-bbase">20</span>
-        </div>
-      </div>
-
-      <div class="row">
-        <span class="rlabel">Brake Max Force</span>
-        <div class="srow">
-          <input type="range" id="sl-bmax" min="0" max="255" step="1" value="80"
-                 oninput="onSlider('brake_max_force', +this.value, 'v-bmax', '', v=>v)">
-          <span class="rval" id="v-bmax">80</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Network -->
-    <div class="card">
-      <div class="ctitle">Network</div>
-      <div class="row">
-        <span class="rlabel">UDP Port</span>
-        <input type="number" id="inp-port" min="1" max="65535" value="5300"
-               onchange="api('save_setting','udp_port',+this.value)">
-      </div>
-    </div>
-
-    <!-- System -->
-    <div class="card">
-      <div class="ctitle">System</div>
-
-      <div class="row">
-        <span class="rlabel">Startup Pulse</span>
+      <div class="setting-row">
+        <span class="setting-label">Enable Startup Pulse</span>
         <label class="tgl">
           <input type="checkbox" id="tg-pulse" onchange="saveBool('enable_startup_pulse',this.checked)">
           <div class="ttrack"></div><div class="tthumb"></div>
         </label>
       </div>
 
-      <div class="row">
-        <span class="rlabel">Pulse Strength</span>
-        <div class="srow">
-          <input type="range" id="sl-pulse" min="0" max="255" step="1" value="150"
-                 oninput="onSlider('startup_pulse_force', +this.value, 'v-pulse', '', v=>v)">
-          <span class="rval" id="v-pulse">150</span>
-        </div>
+      <div class="setting-row">
+        <span class="setting-label">Enable Wheelspin Buzz</span>
+        <label class="tgl">
+          <input type="checkbox" id="tg-wheelspin" onchange="saveBool('enable_wheelspin_buzz',this.checked)">
+          <div class="ttrack"></div><div class="tthumb"></div>
+        </label>
       </div>
 
-      <div class="row" style="flex-direction:column;align-items:stretch;gap:10px;border-bottom:none;padding-bottom:0">
-        <span class="rlabel">Moonlight Streaming</span>
-        <button class="moonbtn off" id="btn-moon" onclick="toggleMoon()">🌙  Moonlight Mode: OFF</button>
+      <div class="setting-row">
+        <span class="setting-label">Enable Idle Buzz</span>
+        <label class="tgl">
+          <input type="checkbox" id="tg-idle" onchange="saveBool('enable_idle_buzz',this.checked)">
+          <div class="ttrack"></div><div class="tthumb"></div>
+        </label>
       </div>
+
+      <!-- Moonlight -->
+      <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px;border-bottom:none">
+        <button class="moon-btn off" id="btn-moon" onclick="toggleMoon()">🌙  Moonlight Streaming Mode: OFF</button>
+      </div>
+
+      <button class="reset-btn" onclick="resetSettings()">Reset to Defaults</button>
+
     </div>
-
-    <!-- Language -->
-    <div class="card">
-      <div class="ctitle">Language</div>
-      <div class="langrow">
-        <button class="lbtn on" id="lbtn-en" onclick="setLang('en')">🇬🇧  English</button>
-        <button class="lbtn"    id="lbtn-de" onclick="setLang('de')">🇩🇪  Deutsch</button>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer full">
-      <span class="credit">Originally created by <span onclick="api('open_url','__SOURCE__')">Hamza Yeşilmen</span></span>
-      <div class="flinks">
-        <button class="flink" onclick="api('open_url','__CHANGELOG__')">v__VERSION__</button>
-        <button class="flink sp" onclick="api('open_url','__SPONSOR__')">♥  Sponsor</button>
-      </div>
-    </div>
-
   </div>
+
+</div>
+
+<!-- ── Footer ──────────────────────────────────────────────────────────────── -->
+<div class="footer">
+  <span>Originally created by <span style="color:var(--accent);cursor:pointer" onclick="api('open_url','__SOURCE__')">Hamza Yeşilmen</span></span>
+  <span>
+    <button class="footer-link" onclick="api('open_url','__CHANGELOG__')">v__VERSION__</button>
+    &nbsp;·&nbsp;
+    <button class="footer-link footer-sp" onclick="api('open_url','__SPONSOR__')">♥ Sponsor</button>
+  </span>
 </div>
 
 <script>
@@ -401,33 +405,27 @@ waitForApi(async () => {
 });
 
 function applySettings(s) {
-  // intensity slider (stored 0.0-2.0, slider 0-200)
-  const iSlider = document.getElementById('sl-intensity');
-  iSlider.value = Math.round((s.trigger_intensity ?? 1.0) * 100);
-  document.getElementById('v-intensity').textContent = iSlider.value + '%';
+  document.getElementById('inp-port').value = s.udp_port;
 
-  // toggles
-  document.getElementById('tg-brake').checked    = !!s.enable_brake_resistance;
-  document.getElementById('tg-throttle').checked = !!s.enable_throttle_resistance;
-  document.getElementById('tg-abs').checked      = !!s.enable_abs;
-  document.getElementById('tg-wheelspin').checked = !!s.enable_wheelspin_buzz;
-  document.getElementById('tg-idle').checked     = !!s.enable_idle_buzz;
-  document.getElementById('tg-pulse').checked    = !!s.enable_startup_pulse;
+  const pct = Math.round((s.trigger_intensity ?? 1.0) * 100);
+  document.getElementById('sl-intensity').value = pct;
+  document.getElementById('v-intensity').textContent = pct + '%';
 
-  // sliders
   setSlider('sl-bdz',   'v-bdz',   s.brake_deadzone,       v => v);
   setSlider('sl-bbase', 'v-bbase', s.brake_baseline_force, v => v);
   setSlider('sl-bmax',  'v-bmax',  s.brake_max_force,      v => v);
   setSlider('sl-pulse', 'v-pulse', s.startup_pulse_force,  v => v);
 
-  // port
-  document.getElementById('inp-port').value = s.udp_port;
+  document.getElementById('tg-brake').checked     = !!s.enable_brake_resistance;
+  document.getElementById('tg-throttle').checked  = !!s.enable_throttle_resistance;
+  document.getElementById('tg-abs').checked       = !!s.enable_abs;
+  document.getElementById('tg-pulse').checked     = !!s.enable_startup_pulse;
+  document.getElementById('tg-wheelspin').checked = !!s.enable_wheelspin_buzz;
+  document.getElementById('tg-idle').checked      = !!s.enable_idle_buzz;
 
-  // moonlight
   _moon = !!s.moonlight_mode;
   updateMoon();
 
-  // language
   _lang = s.language || 'en';
   updateLang();
 }
@@ -436,27 +434,29 @@ function applySettings(s) {
 window.__fhds = {
   onStatus(s) {
     _running = s.running;
-    const dot  = document.getElementById('sdot');
-    const lbl  = document.getElementById('slabel');
-    const ctrl = document.getElementById('v-ctrl');
-    const sess = document.getElementById('v-sess');
+
+    const dot  = document.getElementById('ds-dot');
+    const dsv  = document.getElementById('ds-val');
+    const sessv = document.getElementById('sess-val');
+    const udpv  = document.getElementById('udp-val');
 
     if (s.state === 'connected') {
       dot.style.background = 'var(--green)';
-      ctrl.className = 'sval ok'; ctrl.textContent = 'Connected';
+      dsv.className = 'status-val ok'; dsv.textContent = 'Connected';
     } else if (s.state === 'waiting') {
       dot.style.background = 'var(--accent)';
-      ctrl.className = 'sval'; ctrl.style.color = 'var(--accent)'; ctrl.textContent = 'Waiting…';
+      dsv.className = 'status-val'; dsv.style.color = 'var(--accent)'; dsv.textContent = 'Waiting…';
     } else {
-      dot.style.background = 'var(--red)';
-      ctrl.className = 'sval'; ctrl.style.color = 'var(--faint)'; ctrl.textContent = '–';
+      dot.style.background = 'var(--faint)';
+      dsv.className = 'status-val'; dsv.style.color = 'var(--faint)'; dsv.textContent = '–';
     }
-    lbl.textContent = s.label || s.state;
 
     if (s.running) {
-      sess.className = 'sval run'; sess.textContent = 'Running';
+      sessv.className = 'status-val run'; sessv.textContent = 'Running';
+      udpv.className  = 'status-val ok';  udpv.textContent  = 'Listening';
     } else {
-      sess.className = 'sval'; sess.style.color = 'var(--faint)'; sess.textContent = 'Stopped';
+      sessv.className = 'status-val'; sessv.style.color = 'var(--faint)'; sessv.textContent = 'Stopped';
+      udpv.className  = 'status-val'; udpv.style.color  = 'var(--faint)'; udpv.textContent  = '–';
     }
 
     document.getElementById('btn-start').disabled = _running;
@@ -475,19 +475,31 @@ function setSlider(id, valId, val, fmt) {
 }
 
 const _timers = {};
-function onSlider(key, val, valId, _unused, fmt) {
+function onSlider(key, val, valId, fmt) {
   document.getElementById(valId).textContent = fmt(val);
   clearTimeout(_timers[key]);
   _timers[key] = setTimeout(() => api('save_setting', key, val), 150);
 }
 
+let _iTimer;
+function onIntensity(val) {
+  document.getElementById('v-intensity').textContent = parseInt(val) + '%';
+  clearTimeout(_iTimer);
+  _iTimer = setTimeout(() => api('save_setting', 'trigger_intensity', parseInt(val) / 100), 150);
+}
+
 function saveBool(key, val) { api('save_setting', key, val); }
+
+async function resetSettings() {
+  const s = await api('reset_settings');
+  applySettings(s);
+}
 
 // ── Moonlight ─────────────────────────────────────────────────────────────────
 function updateMoon() {
   const btn = document.getElementById('btn-moon');
-  btn.className = 'moonbtn ' + (_moon ? 'on' : 'off');
-  btn.textContent = '🌙  Moonlight Mode: ' + (_moon ? 'ON' : 'OFF');
+  btn.className = 'moon-btn ' + (_moon ? 'on' : 'off');
+  btn.textContent = '🌙  Moonlight Streaming Mode: ' + (_moon ? 'ON' : 'OFF');
 }
 async function toggleMoon() {
   _moon = !_moon;
