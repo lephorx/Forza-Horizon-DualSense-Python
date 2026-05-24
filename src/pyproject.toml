@@ -11,6 +11,7 @@ dependencies = [
     "pillow>=11.0.0",
     "psutil>=7.2.2",
     "pystray>=0.19.5",
+    "pywebview>=5.0",
     "textual>=8.2.5",
 ]
 
@@ -18,7 +19,7 @@ dependencies = [
 project-includes = ["src"]
 search-path = ["src"]
 ignore-errors-in-generated-code = true
-python-interpreter-path = ".venv/Scripts/python.exe"
+python-interpreter-path = ".venv/bin/python"
 
 [tool.pyrefly.errors]
 bad-argument-type = false
