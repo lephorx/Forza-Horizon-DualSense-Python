@@ -209,34 +209,10 @@ input[type=number]:focus { outline: none; border-color: var(--accent); }
 }
 .reset-btn:hover { background: rgba(239,68,68,.15); color: var(--red); border-color: rgba(239,68,68,.3); }
 
-/* Live graph */
-.graph-wrap {
-  padding: 10px 0 4px;
-  border-bottom: 1px solid var(--border);
-}
-.graph-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 6px;
-}
-.graph-label {
-  font-size: 10px; font-weight: 700; letter-spacing: 1px;
-  text-transform: uppercase; color: var(--muted);
-}
-.graph-legend {
-  display: flex; gap: 10px;
-}
-.legend-item {
-  display: flex; align-items: center; gap: 4px;
-  font-size: 9px; color: var(--muted);
-}
-.legend-dot {
-  width: 8px; height: 2px; border-radius: 1px;
-}
-#tele-canvas {
-  display: block; width: 100%; height: 90px;
-  background: rgba(0,0,0,.28);
-  border: 1px solid var(--border);
-  border-radius: 4px;
+/* Status pill (top right of left panel body) */
+.conn-dot {
+  display: inline-block; width: 7px; height: 7px;
+  border-radius: 50%; margin-right: 6px; background: var(--faint);
 }
 </style>
 </head>
@@ -318,28 +294,6 @@ input[type=number]:focus { outline: none; border-color: var(--accent); }
         </div>
       </div>
 
-      <div class="setting-row">
-        <span class="setting-label">Brake Curve Power</span>
-        <div class="slider-wrap">
-          <input type="range" id="sl-bcurve" min="0.5" max="10" step="0.5" value="5"
-                 oninput="onBrakeCurve(+this.value)">
-          <span class="slider-val" id="v-bcurve">5.0</span>
-        </div>
-      </div>
-
-      <!-- Live telemetry graph -->
-      <div class="graph-wrap">
-        <div class="graph-header">
-          <span class="graph-label">Live Triggers</span>
-          <div class="graph-legend">
-            <span class="legend-item"><span class="legend-dot" style="background:#6366f1"></span>L2</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>R2</span>
-          </div>
-        </div>
-        <canvas id="tele-canvas" width="448" height="90"></canvas>
-      </div>
-
-      <!-- Other sliders -->
       <div class="setting-row">
         <span class="setting-label">Overall Intensity</span>
         <div class="slider-wrap">
@@ -435,11 +389,6 @@ let _running = false;
 let _moon    = false;
 let _lang    = 'en';
 
-// Rolling telemetry buffers — 150 samples × 0.3 s ≈ 45 s of history
-const _MAX = 150;
-const _telL2 = [];
-const _telR2 = [];
-
 // ── API bridge ────────────────────────────────────────────────────────────────
 function waitForApi(cb) {
   if (window.pywebview && window.pywebview.api) { cb(); return; }
@@ -453,10 +402,6 @@ async function api(method, ...args) {
 waitForApi(async () => {
   const s = await api('get_settings');
   applySettings(s);
-  // Flush any log lines that arrived before the page connected
-  const initial = await api('get_logs', 200);
-  if (initial && initial.length) appendLogs(initial);
-  drawGraph();
 });
 
 function applySettings(s) {
@@ -466,14 +411,10 @@ function applySettings(s) {
   document.getElementById('sl-intensity').value = pct;
   document.getElementById('v-intensity').textContent = pct + '%';
 
-  setSlider('sl-bdz',    'v-bdz',    s.brake_deadzone,       v => v);
-  setSlider('sl-bbase',  'v-bbase',  s.brake_baseline_force, v => v);
-  setSlider('sl-bmax',   'v-bmax',   s.brake_max_force,      v => v);
-  setSlider('sl-pulse',  'v-pulse',  s.startup_pulse_force,  v => v);
-
-  const curveVal = s.brake_curve ?? 5.0;
-  document.getElementById('sl-bcurve').value = curveVal;
-  document.getElementById('v-bcurve').textContent = parseFloat(curveVal).toFixed(1);
+  setSlider('sl-bdz',   'v-bdz',   s.brake_deadzone,       v => v);
+  setSlider('sl-bbase', 'v-bbase', s.brake_baseline_force, v => v);
+  setSlider('sl-bmax',  'v-bmax',  s.brake_max_force,      v => v);
+  setSlider('sl-pulse', 'v-pulse', s.startup_pulse_force,  v => v);
 
   document.getElementById('tg-brake').checked     = !!s.enable_brake_resistance;
   document.getElementById('tg-throttle').checked  = !!s.enable_throttle_resistance;
@@ -514,31 +455,9 @@ window.__fhds = {
       sessv.className = 'status-val run'; sessv.textContent = 'Running';
       udpv.className  = 'status-val ok';  udpv.textContent  = 'Listening';
     } else {
-      sessv.className = 'status-val'; sessv.textContent = 'Stopped';
-      udpv.className  = 'status-val'; udpv.textContent  = '–';
+      sessv.className = 'status-val'; sessv.style.color = 'var(--faint)'; sessv.textContent = 'Stopped';
+      udpv.className  = 'status-val'; udpv.style.color  = 'var(--faint)'; udpv.textContent  = '–';
     }
-
-    // Telemetry age
-    if (s.pkt_ago === null || s.pkt_ago === undefined) {
-      telev.className = 'status-val'; telev.textContent = s.running ? 'No signal' : '–';
-    } else if (s.pkt_ago < 1.5) {
-      telev.className = 'status-val ok'; telev.textContent = s.pkt_ago.toFixed(1) + 's ago';
-    } else if (s.pkt_ago < 5) {
-      telev.className = 'status-val warn'; telev.textContent = s.pkt_ago.toFixed(1) + 's ago';
-    } else {
-      telev.className = 'status-val error'; telev.textContent = s.pkt_ago.toFixed(0) + 's ago';
-    }
-
-    // Trigger bars + live graph
-    const l2pct = Math.round((s.left_pct  || 0) / 255 * 100);
-    const r2pct = Math.round((s.right_pct || 0) / 255 * 100);
-    document.getElementById('bar-l2').style.width   = l2pct + '%';
-    document.getElementById('bar-r2').style.width   = r2pct + '%';
-    document.getElementById('pct-l2').textContent   = l2pct + '%';
-    document.getElementById('pct-r2').textContent   = r2pct + '%';
-    _telL2.push(l2pct); if (_telL2.length > _MAX) _telL2.shift();
-    _telR2.push(r2pct); if (_telR2.length > _MAX) _telR2.shift();
-    drawGraph();
 
     document.getElementById('btn-start').disabled = _running;
     document.getElementById('btn-stop').disabled  = !_running;
@@ -560,18 +479,6 @@ function onSlider(key, val, valId, fmt) {
   document.getElementById(valId).textContent = fmt(val);
   clearTimeout(_timers[key]);
   _timers[key] = setTimeout(() => api('save_setting', key, val), 150);
-}
-
-function onBrakeSlider(key, valId, val) {
-  document.getElementById(valId).textContent = val;
-  clearTimeout(_timers[key]);
-  _timers[key] = setTimeout(() => api('save_setting', key, val), 150);
-}
-
-function onBrakeCurve(val) {
-  document.getElementById('v-bcurve').textContent = parseFloat(val).toFixed(1);
-  clearTimeout(_timers['brake_curve']);
-  _timers['brake_curve'] = setTimeout(() => api('save_setting', 'brake_curve', val), 150);
 }
 
 let _iTimer;
@@ -609,83 +516,6 @@ async function setLang(code) {
   _lang = code;
   updateLang();
   await api('save_setting', 'language', code);
-}
-
-// ── Live telemetry graph ──────────────────────────────────────────────────────
-function drawGraph() {
-  const canvas = document.getElementById('tele-canvas');
-  if (!canvas) return;
-
-  // Sync attribute size to actual CSS pixels so lines are sharp
-  const rect = canvas.getBoundingClientRect();
-  const dpr  = window.devicePixelRatio || 1;
-  const W    = Math.round(rect.width  * dpr) || canvas.width;
-  const H    = Math.round(rect.height * dpr) || canvas.height;
-  if (canvas.width !== W || canvas.height !== H) {
-    canvas.width  = W;
-    canvas.height = H;
-  }
-
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, W, H);
-
-  // Horizontal grid lines at 25 / 50 / 75 %
-  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-  ctx.lineWidth = 1;
-  [0.25, 0.5, 0.75].forEach(f => {
-    const y = Math.round(H * (1 - f)) + 0.5;
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-  });
-
-  if (_telL2.length < 2) return; // nothing to draw yet
-
-  const drawLine = (buf, color) => {
-    ctx.beginPath();
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 1.5 * dpr;
-    ctx.lineJoin = 'round';
-    buf.forEach((v, i) => {
-      const x = (i / (_MAX - 1)) * W;
-      const y = H - (v / 100) * (H - 2) - 1;
-      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-    });
-    ctx.stroke();
-  };
-
-  // Fill under L2
-  ctx.beginPath();
-  _telL2.forEach((v, i) => {
-    const x = (i / (_MAX - 1)) * W;
-    const y = H - (v / 100) * (H - 2) - 1;
-    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-  });
-  ctx.lineTo((_telL2.length - 1) / (_MAX - 1) * W, H);
-  ctx.lineTo(0, H);
-  ctx.closePath();
-  const gL2 = ctx.createLinearGradient(0, 0, 0, H);
-  gL2.addColorStop(0, 'rgba(99,102,241,0.22)');
-  gL2.addColorStop(1, 'rgba(99,102,241,0.02)');
-  ctx.fillStyle = gL2;
-  ctx.fill();
-
-  // Fill under R2
-  ctx.beginPath();
-  _telR2.forEach((v, i) => {
-    const x = (i / (_MAX - 1)) * W;
-    const y = H - (v / 100) * (H - 2) - 1;
-    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-  });
-  ctx.lineTo((_telR2.length - 1) / (_MAX - 1) * W, H);
-  ctx.lineTo(0, H);
-  ctx.closePath();
-  const gR2 = ctx.createLinearGradient(0, 0, 0, H);
-  gR2.addColorStop(0, 'rgba(34,197,94,0.18)');
-  gR2.addColorStop(1, 'rgba(34,197,94,0.02)');
-  ctx.fillStyle = gR2;
-  ctx.fill();
-
-  drawLine(_telL2, '#6366f1');
-  drawLine(_telR2, '#22c55e');
 }
 </script>
 </body>
