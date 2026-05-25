@@ -8,219 +8,193 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --panel:    rgba(12, 13, 20, 0.62);
-  --header:   rgba(6, 7, 12, 0.80);
-  --row:      rgba(255,255,255,0.02);
-  --border:   rgba(255,255,255,0.09);
-  --blur:     blur(28px) saturate(160%);
-  --accent:   #6366f1;
-  --green:    #22c55e;
-  --red:      #ef4444;
-  --text:     #dde0f0;
-  --muted:    #6b7090;
-  --faint:    #353750;
-  font-family: -apple-system, "Segoe UI", BlinkMacSystemFont, sans-serif;
-  font-size: 13px;
-  color: var(--text);
+  --panel:  rgba(12,13,20,0.62);
+  --header: rgba(6,7,12,0.80);
+  --border: rgba(255,255,255,0.09);
+  --blur:   blur(28px) saturate(160%);
+  --accent: #6366f1;
+  --green:  #22c55e;
+  --red:    #ef4444;
+  --amber:  #f59e0b;
+  --text:   #dde0f0;
+  --muted:  #6b7090;
+  --faint:  #353750;
+  font-family: -apple-system,"Segoe UI",BlinkMacSystemFont,sans-serif;
+  font-size: 13px; color: var(--text);
   -webkit-font-smoothing: antialiased;
 }
 
-html, body {
-  width: 100%; height: 100%; overflow: hidden;
-  background: #0a0b10;
-}
-
+html,body { width:100%; height:100%; overflow:hidden; background:#0a0b10; }
 body {
   background-image: url('__BG_URI__');
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  flex-direction: column;
+  background-size: cover; background-position: center;
+  display: flex; flex-direction: column;
 }
 
-/* ── Layout ───────────────────────────────────────────────────────────────── */
+/* ── Layout ── */
 .workspace {
-  flex: 1;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 24px 24px 16px;
-  gap: 14px;
-  overflow: hidden;
+  flex: 1; display: flex; align-items: flex-start; justify-content: center;
+  padding: 24px 24px 16px; gap: 14px; overflow: hidden;
 }
-
 .footer {
-  padding: 7px 16px;
-  background: rgba(6,7,12,0.75);
+  padding: 7px 16px; background: rgba(6,7,12,.75);
   border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 11px;
-  color: var(--muted);
-  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 11px; color: var(--muted); flex-shrink: 0;
 }
-.footer-link {
-  background: none; border: none; cursor: pointer;
-  color: var(--muted); font-size: 11px;
-  transition: color .15s;
-}
-.footer-link:hover { color: var(--text); }
-.footer-sp { color: #f472b6; }
-.footer-sp:hover { color: #fb7185; }
+.footer-link { background:none; border:none; cursor:pointer; color:var(--muted); font-size:11px; transition:color .15s; }
+.footer-link:hover { color:var(--text); }
+.footer-sp { color:#f472b6; }
+.footer-sp:hover { color:#fb7185; }
 
-/* ── Panel ────────────────────────────────────────────────────────────────── */
+/* ── Panel ── */
 .panel {
-  background: var(--panel);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  background: var(--panel); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border); border-radius: 6px;
+  display: flex; flex-direction: column; overflow: hidden;
 }
-
-.panel-left  { width: 260px; flex-shrink: 0; max-height: calc(100vh - 100px); }
-.panel-right { width: 480px; flex-shrink: 0; max-height: calc(100vh - 100px); }
-
+.panel-left  { width:280px; flex-shrink:0; max-height:calc(100vh - 100px); }
+.panel-right { width:480px; flex-shrink:0; max-height:calc(100vh - 100px); }
 .panel-header {
-  background: var(--header);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 16px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text);
-  flex-shrink: 0;
+  background: var(--header); border-bottom: 1px solid var(--border);
+  padding: 10px 16px; font-size:11px; font-weight:700; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--text); flex-shrink:0;
 }
-
 .panel-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 14px 16px;
+  flex:1; overflow-y:auto; padding:14px 16px;
+  display:flex; flex-direction:column;
 }
-.panel-body::-webkit-scrollbar { width: 4px; }
-.panel-body::-webkit-scrollbar-track { background: transparent; }
-.panel-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
+.panel-body::-webkit-scrollbar { width:4px; }
+.panel-body::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:4px; }
 
-/* ── Controls panel ───────────────────────────────────────────────────────── */
-.session-btn {
-  width: 100%; padding: 11px; border-radius: 4px; border: none;
-  font-size: 12px; font-weight: 700; letter-spacing: 1px;
-  text-transform: uppercase; cursor: pointer; transition: background .15s;
-  margin-bottom: 4px;
-}
-.btn-start { background: rgba(34,197,94,.15); color: var(--green); border: 1px solid rgba(34,197,94,.3); }
-.btn-start:hover:not(:disabled) { background: var(--green); color: #fff; }
-.btn-start:disabled { opacity: .35; cursor: default; }
-.btn-stop  { background: rgba(239,68,68,.15); color: var(--red); border: 1px solid rgba(239,68,68,.3); }
-.btn-stop:hover:not(:disabled)  { background: var(--red); color: #fff; }
-.btn-stop:disabled  { opacity: .35; cursor: default; }
-
+/* ── Section title ── */
 .section-title {
-  font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
-  text-transform: uppercase; color: var(--muted);
-  margin: 16px 0 8px;
+  font-size:10px; font-weight:700; letter-spacing:1.2px;
+  text-transform:uppercase; color:var(--muted); margin:14px 0 7px;
 }
 
+/* ── Session buttons ── */
+.session-btn {
+  width:100%; padding:11px; border-radius:4px; border:none;
+  font-size:12px; font-weight:700; letter-spacing:1px;
+  text-transform:uppercase; cursor:pointer; transition:background .15s; margin-bottom:4px;
+}
+.btn-start { background:rgba(34,197,94,.15); color:var(--green); border:1px solid rgba(34,197,94,.3); }
+.btn-start:hover:not(:disabled) { background:var(--green); color:#fff; }
+.btn-start:disabled { opacity:.35; cursor:default; }
+.btn-stop  { background:rgba(239,68,68,.15);  color:var(--red);   border:1px solid rgba(239,68,68,.3); }
+.btn-stop:hover:not(:disabled)  { background:var(--red);   color:#fff; }
+.btn-stop:disabled  { opacity:.35; cursor:default; }
+
+/* ── Status rows ── */
 .status-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 5px 0;
-  border-bottom: 1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+  padding:5px 0; border-bottom:1px solid var(--border);
 }
-.status-row:last-child { border-bottom: none; }
-.status-label { color: var(--muted); font-size: 12px; }
-.status-val   { font-size: 12px; font-weight: 600; color: var(--faint); }
-.status-val.ok  { color: var(--green); }
-.status-val.run { color: var(--accent); }
-
-/* ── Settings panel ───────────────────────────────────────────────────────── */
-.setting-row {
-  display: flex; align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-}
-.setting-row:last-child { border-bottom: none; }
-.setting-label { flex: 1; font-size: 12px; color: var(--text); }
-
-/* Slider */
-.slider-wrap { display: flex; align-items: center; gap: 8px; }
-input[type=range] {
-  width: 130px; accent-color: var(--accent); cursor: pointer; height: 3px;
-}
-.slider-val {
-  width: 34px; text-align: right; font-size: 12px;
-  color: var(--muted); font-variant-numeric: tabular-nums;
-}
-
-/* Number */
-input[type=number] {
-  width: 72px; background: rgba(255,255,255,.06);
-  border: 1px solid var(--border); border-radius: 4px;
-  color: var(--text); padding: 4px 8px; font-size: 12px;
-  text-align: right; -moz-appearance: textfield;
-}
-input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
-input[type=number]:focus { outline: none; border-color: var(--accent); }
-
-/* Toggle */
-.tgl { position: relative; display: inline-flex; align-items: center; width: 36px; height: 19px; cursor: pointer; }
-.tgl input { opacity: 0; width: 0; height: 0; position: absolute; }
-.ttrack {
-  position: absolute; inset: 0; border-radius: 19px;
-  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
-  transition: background .18s;
-}
-.tgl input:checked + .ttrack { background: var(--accent); border-color: var(--accent); }
-.tthumb {
-  position: absolute; width: 13px; height: 13px; border-radius: 50%;
-  background: #fff; top: 3px; left: 3px; transition: left .18s; pointer-events: none;
-}
-.tgl input:checked ~ .tthumb { left: 20px; }
-
-/* Lang */
-.lang-wrap { display: flex; gap: 6px; }
-.lbtn {
-  padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border);
-  background: rgba(255,255,255,.05); color: var(--muted);
-  font-size: 11px; font-weight: 700; cursor: pointer; transition: all .15s;
-}
-.lbtn.on { background: rgba(99,102,241,.2); color: var(--accent); border-color: rgba(99,102,241,.5); }
-
-/* Moonlight */
-.moon-btn {
-  width: 100%; padding: 8px; border-radius: 4px; border: none;
-  font-size: 11px; font-weight: 700; letter-spacing: .5px;
-  text-transform: uppercase; cursor: pointer; transition: all .15s;
-}
-.moon-btn.off { background: rgba(255,255,255,.05); color: var(--muted); border: 1px solid var(--border); }
-.moon-btn.on  { background: rgba(99,102,241,.18); color: var(--accent); border: 1px solid rgba(99,102,241,.4); }
-.moon-btn:hover { filter: brightness(1.2); }
-
-/* Reset btn */
-.reset-btn {
-  width: 100%; padding: 9px; border-radius: 4px; border: 1px solid var(--border);
-  background: rgba(255,255,255,.05); color: var(--muted);
-  font-size: 11px; font-weight: 700; letter-spacing: 1px;
-  text-transform: uppercase; cursor: pointer; transition: all .15s;
-  margin-top: 14px;
-}
-.reset-btn:hover { background: rgba(239,68,68,.15); color: var(--red); border-color: rgba(239,68,68,.3); }
-
-/* Status pill (top right of left panel body) */
+.status-row:last-child { border-bottom:none; }
+.status-label { color:var(--muted); font-size:12px; }
+.status-val   { font-size:12px; font-weight:600; color:var(--faint); }
+.status-val.ok    { color:var(--green); }
+.status-val.run   { color:var(--accent); }
+.status-val.warn  { color:var(--amber); }
+.status-val.error { color:var(--red); }
 .conn-dot {
-  display: inline-block; width: 7px; height: 7px;
-  border-radius: 50%; margin-right: 6px; background: var(--faint);
+  display:inline-block; width:7px; height:7px;
+  border-radius:50%; margin-right:6px; background:var(--faint); transition:background .3s;
 }
+
+/* ── Trigger bars ── */
+.bar-row { display:flex; align-items:center; gap:8px; padding:4px 0; }
+.bar-label { font-size:11px; color:var(--muted); width:18px; flex-shrink:0; }
+.bar-track {
+  flex:1; height:7px; background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.06); border-radius:4px; overflow:hidden;
+}
+.bar-fill {
+  height:100%; width:0%;
+  background:linear-gradient(90deg,var(--accent),#818cf8);
+  border-radius:4px; transition:width .12s linear;
+}
+.bar-pct { font-size:10px; color:var(--muted); width:30px; text-align:right; font-variant-numeric:tabular-nums; }
+
+/* ── Test button ── */
+.test-btn {
+  width:100%; padding:8px; border-radius:4px;
+  border:1px solid rgba(99,102,241,.35); background:rgba(99,102,241,.10); color:var(--accent);
+  font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase;
+  cursor:pointer; transition:all .15s; margin-top:8px;
+}
+.test-btn:hover:not(:disabled) { background:rgba(99,102,241,.25); }
+.test-btn:disabled { opacity:.35; cursor:default; }
+
+/* ── Live graph ── */
+.graph-wrap { padding:10px 0 4px; }
+.graph-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.graph-label { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
+.graph-legend { display:flex; gap:10px; }
+.legend-item { display:flex; align-items:center; gap:4px; font-size:9px; color:var(--muted); }
+.legend-dot { width:8px; height:2px; border-radius:1px; }
+#tele-canvas {
+  display:block; width:100%; height:90px;
+  background:rgba(0,0,0,.28); border:1px solid var(--border); border-radius:4px;
+}
+
+/* ── Session log ── */
+.log-area {
+  flex:1; min-height:80px; overflow-y:auto;
+  background:rgba(0,0,0,.28); border:1px solid var(--border); border-radius:4px;
+  padding:6px 8px;
+  font-family:"SF Mono","Cascadia Code","Consolas",monospace;
+  font-size:10px; color:var(--muted);
+}
+.log-area::-webkit-scrollbar { width:3px; }
+.log-area::-webkit-scrollbar-thumb { background:rgba(255,255,255,.08); border-radius:2px; }
+.log-entry { margin-bottom:2px; white-space:pre-wrap; word-break:break-all; line-height:1.4; }
+.log-entry.ERROR,.log-entry.CRITICAL { color:var(--red); }
+.log-entry.WARNING { color:var(--amber); }
+.log-entry.INFO    { color:var(--text); }
+.log-entry.DEBUG   { color:var(--muted); }
+
+/* ── Settings panel ── */
+.setting-row {
+  display:flex; align-items:center; padding:8px 0; border-bottom:1px solid var(--border);
+}
+.setting-row:last-child { border-bottom:none; }
+.setting-label { flex:1; font-size:12px; color:var(--text); }
+.slider-wrap { display:flex; align-items:center; gap:8px; }
+input[type=range] { width:130px; accent-color:var(--accent); cursor:pointer; height:3px; }
+.slider-val { width:38px; text-align:right; font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums; }
+input[type=number] {
+  width:72px; background:rgba(255,255,255,.06); border:1px solid var(--border); border-radius:4px;
+  color:var(--text); padding:4px 8px; font-size:12px; text-align:right; appearance:textfield; -moz-appearance:textfield;
+}
+input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
+input[type=number]:focus { outline:none; border-color:var(--accent); }
+.tgl { position:relative; display:inline-flex; align-items:center; width:36px; height:19px; cursor:pointer; }
+.tgl input { opacity:0; width:0; height:0; position:absolute; }
+.ttrack { position:absolute; inset:0; border-radius:19px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); transition:background .18s; }
+.tgl input:checked + .ttrack { background:var(--accent); border-color:var(--accent); }
+.tthumb { position:absolute; width:13px; height:13px; border-radius:50%; background:#fff; top:3px; left:3px; transition:left .18s; pointer-events:none; }
+.tgl input:checked ~ .tthumb { left:20px; }
+.lang-wrap { display:flex; gap:6px; }
+.lbtn { padding:4px 10px; border-radius:4px; border:1px solid var(--border); background:rgba(255,255,255,.05); color:var(--muted); font-size:11px; font-weight:700; cursor:pointer; transition:all .15s; }
+.lbtn.on { background:rgba(99,102,241,.2); color:var(--accent); border-color:rgba(99,102,241,.5); }
+.moon-btn { width:100%; padding:8px; border-radius:4px; border:none; font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; cursor:pointer; transition:all .15s; }
+.moon-btn.off { background:rgba(255,255,255,.05); color:var(--muted); border:1px solid var(--border); }
+.moon-btn.on  { background:rgba(99,102,241,.18); color:var(--accent); border:1px solid rgba(99,102,241,.4); }
+.moon-btn:hover { filter:brightness(1.2); }
+.reset-btn {
+  width:100%; padding:9px; border-radius:4px; border:1px solid var(--border);
+  background:rgba(255,255,255,.05); color:var(--muted); font-size:11px; font-weight:700;
+  letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:all .15s; margin-top:14px;
+}
+.reset-btn:hover { background:rgba(239,68,68,.15); color:var(--red); border-color:rgba(239,68,68,.3); }
 </style>
 </head>
 <body>
-
 <div class="workspace">
 
-  <!-- ── LEFT: Controls ──────────────────────────────────────────────────── -->
+  <!-- LEFT: Controls + Live view -->
   <div class="panel panel-left">
     <div class="panel-header">Controls</div>
     <div class="panel-body">
@@ -238,19 +212,49 @@ input[type=number]:focus { outline: none; border-color: var(--accent); }
         <span class="status-val" id="sess-val">Stopped</span>
       </div>
       <div class="status-row">
+        <span class="status-label">Telemetry</span>
+        <span class="status-val" id="tele-val">–</span>
+      </div>
+      <div class="status-row">
         <span class="status-label">UDP</span>
         <span class="status-val" id="udp-val">–</span>
       </div>
 
+      <div class="section-title">Triggers</div>
+      <div class="bar-row">
+        <span class="bar-label">L2</span>
+        <div class="bar-track"><div class="bar-fill" id="bar-l2"></div></div>
+        <span class="bar-pct" id="pct-l2">0%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">R2</span>
+        <div class="bar-track"><div class="bar-fill" id="bar-r2"></div></div>
+        <span class="bar-pct" id="pct-r2">0%</span>
+      </div>
+      <button class="test-btn" id="btn-test" onclick="testTriggers()">⚡  Test Triggers</button>
+
+      <div class="graph-wrap">
+        <div class="graph-header">
+          <span class="graph-label">Live Triggers</span>
+          <div class="graph-legend">
+            <span class="legend-item"><span class="legend-dot" style="background:#6366f1"></span>L2</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>R2</span>
+          </div>
+        </div>
+        <canvas id="tele-canvas" width="248" height="90"></canvas>
+      </div>
+
+      <div class="section-title">Session Log</div>
+      <div class="log-area" id="log-area"></div>
+
     </div>
   </div>
 
-  <!-- ── RIGHT: Settings ─────────────────────────────────────────────────── -->
+  <!-- RIGHT: Settings -->
   <div class="panel panel-right">
     <div class="panel-header">Settings</div>
     <div class="panel-body">
 
-      <!-- Language -->
       <div class="setting-row">
         <span class="setting-label">Language</span>
         <div class="lang-wrap">
@@ -259,14 +263,12 @@ input[type=number]:focus { outline: none; border-color: var(--accent); }
         </div>
       </div>
 
-      <!-- UDP Port -->
       <div class="setting-row">
         <span class="setting-label">UDP Port</span>
         <input type="number" id="inp-port" min="1" max="65535" value="5300"
                onchange="api('save_setting','udp_port',+this.value)">
       </div>
 
-      <!-- Sliders -->
       <div class="setting-row">
         <span class="setting-label">Brake Deadzone</span>
         <div class="slider-wrap">
@@ -295,6 +297,15 @@ input[type=number]:focus { outline: none; border-color: var(--accent); }
       </div>
 
       <div class="setting-row">
+        <span class="setting-label">Brake Curve Power</span>
+        <div class="slider-wrap">
+          <input type="range" id="sl-bcurve" min="0.5" max="10" step="0.5" value="5"
+                 oninput="onSlider('brake_curve',+this.value,'v-bcurve',v=>v.toFixed(1))">
+          <span class="slider-val" id="v-bcurve">5.0</span>
+        </div>
+      </div>
+
+      <div class="setting-row">
         <span class="setting-label">Overall Intensity</span>
         <div class="slider-wrap">
           <input type="range" id="sl-intensity" min="0" max="200" step="5" value="100"
@@ -312,56 +323,36 @@ input[type=number]:focus { outline: none; border-color: var(--accent); }
         </div>
       </div>
 
-      <!-- Toggles -->
       <div class="setting-row">
         <span class="setting-label">Enable Brake Resistance</span>
-        <label class="tgl">
-          <input type="checkbox" id="tg-brake" onchange="saveBool('enable_brake_resistance',this.checked)">
-          <div class="ttrack"></div><div class="tthumb"></div>
-        </label>
+        <label class="tgl"><input type="checkbox" id="tg-brake" onchange="saveBool('enable_brake_resistance',this.checked)"><div class="ttrack"></div><div class="tthumb"></div></label>
       </div>
 
       <div class="setting-row">
         <span class="setting-label">Enable Throttle Resistance</span>
-        <label class="tgl">
-          <input type="checkbox" id="tg-throttle" onchange="saveBool('enable_throttle_resistance',this.checked)">
-          <div class="ttrack"></div><div class="tthumb"></div>
-        </label>
+        <label class="tgl"><input type="checkbox" id="tg-throttle" onchange="saveBool('enable_throttle_resistance',this.checked)"><div class="ttrack"></div><div class="tthumb"></div></label>
       </div>
 
       <div class="setting-row">
         <span class="setting-label">Enable ABS</span>
-        <label class="tgl">
-          <input type="checkbox" id="tg-abs" onchange="saveBool('enable_abs',this.checked)">
-          <div class="ttrack"></div><div class="tthumb"></div>
-        </label>
+        <label class="tgl"><input type="checkbox" id="tg-abs" onchange="saveBool('enable_abs',this.checked)"><div class="ttrack"></div><div class="tthumb"></div></label>
       </div>
 
       <div class="setting-row">
         <span class="setting-label">Enable Startup Pulse</span>
-        <label class="tgl">
-          <input type="checkbox" id="tg-pulse" onchange="saveBool('enable_startup_pulse',this.checked)">
-          <div class="ttrack"></div><div class="tthumb"></div>
-        </label>
+        <label class="tgl"><input type="checkbox" id="tg-pulse" onchange="saveBool('enable_startup_pulse',this.checked)"><div class="ttrack"></div><div class="tthumb"></div></label>
       </div>
 
       <div class="setting-row">
         <span class="setting-label">Enable Wheelspin Buzz</span>
-        <label class="tgl">
-          <input type="checkbox" id="tg-wheelspin" onchange="saveBool('enable_wheelspin_buzz',this.checked)">
-          <div class="ttrack"></div><div class="tthumb"></div>
-        </label>
+        <label class="tgl"><input type="checkbox" id="tg-wheelspin" onchange="saveBool('enable_wheelspin_buzz',this.checked)"><div class="ttrack"></div><div class="tthumb"></div></label>
       </div>
 
       <div class="setting-row">
         <span class="setting-label">Enable Idle Buzz</span>
-        <label class="tgl">
-          <input type="checkbox" id="tg-idle" onchange="saveBool('enable_idle_buzz',this.checked)">
-          <div class="ttrack"></div><div class="tthumb"></div>
-        </label>
+        <label class="tgl"><input type="checkbox" id="tg-idle" onchange="saveBool('enable_idle_buzz',this.checked)"><div class="ttrack"></div><div class="tthumb"></div></label>
       </div>
 
-      <!-- Moonlight -->
       <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px;border-bottom:none">
         <button class="moon-btn off" id="btn-moon" onclick="toggleMoon()">🌙  Moonlight Streaming Mode: OFF</button>
       </div>
@@ -373,7 +364,6 @@ input[type=number]:focus { outline: none; border-color: var(--accent); }
 
 </div>
 
-<!-- ── Footer ──────────────────────────────────────────────────────────────── -->
 <div class="footer">
   <span>Originally created by <span style="color:var(--accent);cursor:pointer" onclick="api('open_url','__SOURCE__')">Hamza Yeşilmen</span></span>
   <span>
@@ -385,23 +375,21 @@ input[type=number]:focus { outline: none; border-color: var(--accent); }
 
 <script>
 // ── State ─────────────────────────────────────────────────────────────────────
-let _running = false;
-let _moon    = false;
-let _lang    = 'en';
+let _running = false, _moon = false, _lang = 'en';
 
 // ── API bridge ────────────────────────────────────────────────────────────────
 function waitForApi(cb) {
   if (window.pywebview && window.pywebview.api) { cb(); return; }
   setTimeout(() => waitForApi(cb), 50);
 }
-async function api(method, ...args) {
-  return await window.pywebview.api[method](...args);
-}
+async function api(method, ...args) { return await window.pywebview.api[method](...args); }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
 waitForApi(async () => {
   const s = await api('get_settings');
   applySettings(s);
+  const initial = await api('get_logs', 200);
+  if (initial && initial.length) appendLogs(initial);
 });
 
 function applySettings(s) {
@@ -411,10 +399,13 @@ function applySettings(s) {
   document.getElementById('sl-intensity').value = pct;
   document.getElementById('v-intensity').textContent = pct + '%';
 
-  setSlider('sl-bdz',   'v-bdz',   s.brake_deadzone,       v => v);
-  setSlider('sl-bbase', 'v-bbase', s.brake_baseline_force, v => v);
-  setSlider('sl-bmax',  'v-bmax',  s.brake_max_force,      v => v);
-  setSlider('sl-pulse', 'v-pulse', s.startup_pulse_force,  v => v);
+  setSlider('sl-bdz',    'v-bdz',    s.brake_deadzone,       v => v);
+  setSlider('sl-bbase',  'v-bbase',  s.brake_baseline_force, v => v);
+  setSlider('sl-bmax',   'v-bmax',   s.brake_max_force,      v => v);
+  setSlider('sl-pulse',  'v-pulse',  s.startup_pulse_force,  v => v);
+  const cv = s.brake_curve ?? 5.0;
+  document.getElementById('sl-bcurve').value = cv;
+  document.getElementById('v-bcurve').textContent = parseFloat(cv).toFixed(1);
 
   document.getElementById('tg-brake').checked     = !!s.enable_brake_resistance;
   document.getElementById('tg-throttle').checked  = !!s.enable_throttle_resistance;
@@ -423,77 +414,108 @@ function applySettings(s) {
   document.getElementById('tg-wheelspin').checked = !!s.enable_wheelspin_buzz;
   document.getElementById('tg-idle').checked      = !!s.enable_idle_buzz;
 
-  _moon = !!s.moonlight_mode;
-  updateMoon();
-
-  _lang = s.language || 'en';
-  updateLang();
+  _moon = !!s.moonlight_mode; updateMoon();
+  _lang = s.language || 'en'; updateLang();
 }
 
 // ── Python push ───────────────────────────────────────────────────────────────
 window.__fhds = {
   onStatus(s) {
     _running = s.running;
-
-    const dot  = document.getElementById('ds-dot');
-    const dsv  = document.getElementById('ds-val');
+    const dot = document.getElementById('ds-dot');
+    const dsv = document.getElementById('ds-val');
     const sessv = document.getElementById('sess-val');
     const udpv  = document.getElementById('udp-val');
+    const telev = document.getElementById('tele-val');
 
     if (s.state === 'connected') {
       dot.style.background = 'var(--green)';
-      dsv.className = 'status-val ok'; dsv.textContent = 'Connected';
+      dsv.className = 'status-val ok'; dsv.textContent = s.serial ? s.serial.slice(-4) : 'Connected';
     } else if (s.state === 'waiting') {
       dot.style.background = 'var(--accent)';
-      dsv.className = 'status-val'; dsv.style.color = 'var(--accent)'; dsv.textContent = 'Waiting…';
+      dsv.className = 'status-val run'; dsv.textContent = 'Waiting…';
     } else {
       dot.style.background = 'var(--faint)';
-      dsv.className = 'status-val'; dsv.style.color = 'var(--faint)'; dsv.textContent = '–';
+      dsv.className = 'status-val'; dsv.textContent = '–';
     }
 
     if (s.running) {
       sessv.className = 'status-val run'; sessv.textContent = 'Running';
       udpv.className  = 'status-val ok';  udpv.textContent  = 'Listening';
     } else {
-      sessv.className = 'status-val'; sessv.style.color = 'var(--faint)'; sessv.textContent = 'Stopped';
-      udpv.className  = 'status-val'; udpv.style.color  = 'var(--faint)'; udpv.textContent  = '–';
+      sessv.className = 'status-val'; sessv.textContent = 'Stopped';
+      udpv.className  = 'status-val'; udpv.textContent  = '–';
     }
+
+    if (s.pkt_ago == null) {
+      telev.className = 'status-val'; telev.textContent = s.running ? 'No signal' : '–';
+    } else if (s.pkt_ago < 1.5) {
+      telev.className = 'status-val ok';    telev.textContent = s.pkt_ago.toFixed(1) + 's ago';
+    } else if (s.pkt_ago < 5) {
+      telev.className = 'status-val warn';  telev.textContent = s.pkt_ago.toFixed(1) + 's ago';
+    } else {
+      telev.className = 'status-val error'; telev.textContent = s.pkt_ago.toFixed(0) + 's ago';
+    }
+
+    const l2pct = Math.round((s.left_pct  || 0) / 255 * 100);
+    const r2pct = Math.round((s.right_pct || 0) / 255 * 100);
+    document.getElementById('bar-l2').style.width = l2pct + '%';
+    document.getElementById('bar-r2').style.width = r2pct + '%';
+    document.getElementById('pct-l2').textContent = l2pct + '%';
+    document.getElementById('pct-r2').textContent = r2pct + '%';
+    _pushTelPoint(l2pct, r2pct);
 
     document.getElementById('btn-start').disabled = _running;
     document.getElementById('btn-stop').disabled  = !_running;
   },
+
+  appendLogs(entries) { appendLogs(entries); },
 };
+
+function appendLogs(entries) {
+  const area = document.getElementById('log-area');
+  const atBottom = area.scrollHeight - area.scrollTop <= area.clientHeight + 10;
+  entries.forEach(e => {
+    const div = document.createElement('div');
+    div.className = 'log-entry ' + (e.level || 'DEBUG');
+    div.textContent = e.msg;
+    area.appendChild(div);
+  });
+  while (area.children.length > 600) area.removeChild(area.firstChild);
+  if (atBottom) area.scrollTop = area.scrollHeight;
+}
 
 // ── Session ───────────────────────────────────────────────────────────────────
 async function onStart() { await api('start_session'); }
 async function onStop()  { await api('stop_session'); }
 
-// ── Controls ──────────────────────────────────────────────────────────────────
+// ── Test triggers ─────────────────────────────────────────────────────────────
+async function testTriggers() {
+  const btn = document.getElementById('btn-test');
+  btn.disabled = true; btn.textContent = '⏳  Testing…';
+  await api('test_triggers');
+  setTimeout(() => { btn.disabled = false; btn.textContent = '⚡  Test Triggers'; }, 2600);
+}
+
+// ── Sliders / toggles ─────────────────────────────────────────────────────────
 function setSlider(id, valId, val, fmt) {
   document.getElementById(id).value = val;
   document.getElementById(valId).textContent = fmt(val);
 }
-
 const _timers = {};
 function onSlider(key, val, valId, fmt) {
   document.getElementById(valId).textContent = fmt(val);
   clearTimeout(_timers[key]);
   _timers[key] = setTimeout(() => api('save_setting', key, val), 150);
 }
-
 let _iTimer;
 function onIntensity(val) {
   document.getElementById('v-intensity').textContent = parseInt(val) + '%';
   clearTimeout(_iTimer);
   _iTimer = setTimeout(() => api('save_setting', 'trigger_intensity', parseInt(val) / 100), 150);
 }
-
 function saveBool(key, val) { api('save_setting', key, val); }
-
-async function resetSettings() {
-  const s = await api('reset_settings');
-  applySettings(s);
-}
+async function resetSettings() { const s = await api('reset_settings'); applySettings(s); }
 
 // ── Moonlight ─────────────────────────────────────────────────────────────────
 function updateMoon() {
@@ -501,22 +523,84 @@ function updateMoon() {
   btn.className = 'moon-btn ' + (_moon ? 'on' : 'off');
   btn.textContent = '🌙  Moonlight Streaming Mode: ' + (_moon ? 'ON' : 'OFF');
 }
-async function toggleMoon() {
-  _moon = !_moon;
-  updateMoon();
-  await api('save_setting', 'moonlight_mode', _moon);
-}
+async function toggleMoon() { _moon = !_moon; updateMoon(); await api('save_setting','moonlight_mode',_moon); }
 
 // ── Language ──────────────────────────────────────────────────────────────────
 function updateLang() {
-  document.getElementById('lbtn-en').className = 'lbtn' + (_lang === 'en' ? ' on' : '');
-  document.getElementById('lbtn-de').className = 'lbtn' + (_lang === 'de' ? ' on' : '');
+  document.getElementById('lbtn-en').className = 'lbtn' + (_lang==='en'?' on':'');
+  document.getElementById('lbtn-de').className = 'lbtn' + (_lang==='de'?' on':'');
 }
-async function setLang(code) {
-  _lang = code;
-  updateLang();
-  await api('save_setting', 'language', code);
+async function setLang(code) { _lang = code; updateLang(); await api('save_setting','language',code); }
+
+// ── Live telemetry graph ──────────────────────────────────────────────────────
+const _TEL_WINDOW = 30000;
+const _telBuf = [];
+
+function _pushTelPoint(l2, r2) {
+  const now = Date.now();
+  _telBuf.push({ t: now, l2, r2 });
+  const cutoff = now - _TEL_WINDOW;
+  while (_telBuf.length && _telBuf[0].t < cutoff) _telBuf.shift();
 }
+
+function drawGraph() {
+  const canvas = document.getElementById('tele-canvas');
+  if (!canvas) return;
+  const W = canvas.width, H = canvas.height;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, W, H);
+
+  const now = Date.now();
+  const winStart = now - _TEL_WINDOW;
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1;
+  [0.25, 0.5, 0.75].forEach(f => {
+    const y = Math.round(H * (1 - f)) + 0.5;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  });
+
+  // Scrolling 5s time-grid
+  const gridStep = 5000;
+  const offset = now % gridStep;
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  for (let ms = gridStep - offset; ms < _TEL_WINDOW; ms += gridStep) {
+    const x = Math.round((ms / _TEL_WINDOW) * W) + 0.5;
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+
+  // "Now" cursor
+  ctx.strokeStyle = 'rgba(255,255,255,0.10)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(W - 0.5, 0); ctx.lineTo(W - 0.5, H); ctx.stroke();
+
+  if (_telBuf.length < 2) {
+    ctx.fillStyle = 'rgba(107,112,144,0.4)'; ctx.font = '10px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('start session to see live trigger data', W / 2, H / 2 + 4);
+    ctx.textAlign = 'left';
+    return;
+  }
+
+  const xOf = e => ((e.t - winStart) / _TEL_WINDOW) * W;
+  const yOf = v => H - (v / 100) * (H - 2) - 1;
+
+  const drawSeries = (key, stroke, fillA, fillB) => {
+    ctx.beginPath();
+    _telBuf.forEach((e, i) => { const x=xOf(e),y=yOf(e[key]); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+    const lx = xOf(_telBuf[_telBuf.length-1]);
+    ctx.lineTo(lx, H); ctx.lineTo(xOf(_telBuf[0]), H); ctx.closePath();
+    const g = ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,fillA); g.addColorStop(1,fillB);
+    ctx.fillStyle = g; ctx.fill();
+    ctx.beginPath(); ctx.strokeStyle=stroke; ctx.lineWidth=1.5; ctx.lineJoin='round';
+    _telBuf.forEach((e,i)=>{ const x=xOf(e),y=yOf(e[key]); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+    ctx.stroke();
+  };
+
+  drawSeries('l2','#6366f1','rgba(99,102,241,0.22)','rgba(99,102,241,0.02)');
+  drawSeries('r2','#22c55e','rgba(34,197,94,0.18)', 'rgba(34,197,94,0.02)');
+}
+
+;(function loop() { drawGraph(); requestAnimationFrame(loop); })();
 </script>
 </body>
 </html>

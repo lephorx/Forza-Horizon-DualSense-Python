@@ -12,7 +12,7 @@ def _max_abs(t, prefix):
     return max(abs(t[f"{prefix}_{wheel}"]) for wheel in ("fl", "fr", "rl", "rr"))
 
 
-def run(ds, listener, s, stop_event=None):
+def run(ds, listener, s, stop_event=None, packet_callback=None):
     OFF = dualsense.adaptive_trigger.off()
     controller = forzahorizon.Controller(s)
     prev = None
@@ -63,6 +63,11 @@ def run(ds, listener, s, stop_event=None):
         pkt_count += 1
         last_pkt = now
         listener.lost = False
+        if packet_callback is not None:
+            try:
+                packet_callback()
+            except Exception:
+                pass
         if pkt_count == 1:
             log.info("First packet from %s:%d (%d bytes)", addr[0], addr[1], len(pkt))
 
